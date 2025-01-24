@@ -83,7 +83,8 @@ class Imaging:
             coords={"image_counter": 0},
             attrs=self.attributes,
         )
-        return data
+        dataset = data.to_dataset(name="image_data")
+        return dataset
 
     def set_image_name(self, name="JobinYvonFLframe", suffix=""):
         """Set image name and suffix for saving data"""
