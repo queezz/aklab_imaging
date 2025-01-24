@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aklab_imaging"
+version = "0.1.0"
+description = "A package for imaging and data analysis in the aklab."
+authors = [
+  { name="KAA", email="arseniy.a.kuzmin@gmail.com" },
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20.0",
+    "xarray",
+    "matplotlib",
+    "plotly",
+    "tqdm",
+    "lmfit",
+    "pyserial",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["aklab_imaging"]
+
+[tool.setuptools.exclude-package-data]
+"aklab_imaging" = ["pyfli"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+]
+
+[project.urls]
+homepage = "https://github.com/queezz/aklab_imaging"
+repository = "https://github.com/queezz/aklab_imaging"

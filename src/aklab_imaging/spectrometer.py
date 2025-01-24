@@ -3,6 +3,7 @@ Initialize camera and motor controller.
 Allow only one instance. 
 Doesn't work with importlib.reload, so keeping it simple.
 """
+
 from aklab_imaging.thr640 import THR640
 from aklab_imaging.FLI import FLI
 import aklab_imaging.textcolor as tc
@@ -40,7 +41,7 @@ class Spectrometer:
     """
     Usage:
     spm = Spectrometer()
-    if reconnection is needed, use 
+    if reconnection is needed, use
     spm.disconnect()
     Then spm = Spectrometer() works again.
     """
@@ -61,7 +62,7 @@ class Spectrometer:
             lines = self.grating_motor.get_configuration()
             self.position = self.find_position(lines)
             self.grating_motor.position = self.position
-        else: 
+        else:
             self.position = self.grating_motor.position
         return self.position
 
