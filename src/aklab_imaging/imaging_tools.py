@@ -211,14 +211,15 @@ class Imaging:
         plt.axhline(l1, c="w", lw=1)
         plt.axhline(l2, c="w", lw=1)
 
-    def plotly_plot(self):
+    def plotly_plot(self,image=None):
         """
         Plots an interactive image with adjustable colorbar in Plotly.
 
         Args:
             image (np.ndarray): 2D image data.
         """
-        image = self.image
+        if image is None:
+            image = self.image
         fig = go.Figure()
 
         # Add heatmap
