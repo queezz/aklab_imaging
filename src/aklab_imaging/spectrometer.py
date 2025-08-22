@@ -1,11 +1,10 @@
 """
 Initialize camera and motor controller.
-Allow only one instance. 
+Allow only one instance.
 Doesn't work with importlib.reload, so keeping it simple.
 """
 
 from aklab_imaging.thr640 import THR640
-from aklab_imaging.FLI import FLI
 import aklab_imaging.textcolor as tc
 
 
@@ -47,11 +46,10 @@ class Spectrometer:
     """
 
     def __init__(self):
-        self.camera = FLI()
         self.grating_motor = THR640()
         self.position = None
         self.get_position()
-        print(f"Spectrometer: camera and motor {tc.GREEN}connected, yay!{tc.RESET}")
+        print(f"Spectrometer: motor {tc.GREEN}connected, yay!{tc.RESET}")
 
     def get_position(self):
         """get grating motor position
@@ -78,7 +76,6 @@ class Spectrometer:
         """Disconnect devices and reset singleton instance."""
         print("Disconnecting Spectrometer...")
         try:
-            self.camera.FLIClose()
             self.grating_motor.__del__()
         except Exception as e:
             print(f"Error during disconnect: {e}")

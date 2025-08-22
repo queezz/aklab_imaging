@@ -1,4 +1,10 @@
+"""
+from
+https://github.com/charris/pyfli.git
+"""
+
 import pyfli
+
 
 class FLI:
     def __init__(self):
@@ -61,7 +67,7 @@ class FLI:
         Returns
         -------
         width, hoffset, hbin, height, voffset, vbin: int
-        
+
         Horizontal width and vertical height are in bins, hbin and vbin are the
         horizontal and vertical bin sizes respectively, and hoffset and
         voffset are the x-coordinate and y-coordinates of the upper left
@@ -131,7 +137,7 @@ class FLI:
         Set the image area of the camera.
         左上の座標(ul_x, ul_y)と右下の座標(lr_x, lr_y)が引数
 
-        This function sets the image area to an area specified in terms of 
+        This function sets the image area to an area specified in terms of
         a upper left point and a lower right point.
         The upper-left x-coordinate is `ul_x`, the upper left y-coordinate is
         `ul_y`, the lower right x-coordinate is `lr_x`, and the lower right
