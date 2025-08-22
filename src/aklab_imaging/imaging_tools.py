@@ -1,3 +1,14 @@
+# FLI backend is deprecated
+import warnings
+
+warnings.warn(
+    "FLI backend is deprecated and will be removed in a future release. "
+    "This adapter is no longer maintained.",
+    FutureWarning,  # use DeprecationWarning if you prefer it to be hidden by default
+    stacklevel=2,
+)
+
+
 # Standard library imports
 import os
 import time
@@ -17,7 +28,7 @@ import aklab_imaging.textcolor as tc
 
 
 class Imaging:
-    def __init__(self, Spectrometer):
+    def __init__(self, Spectrometer, Camera=None):
         self.camera = Spectrometer.camera
         self.grating_motor = Spectrometer.grating_motor
         self.spectrometer = Spectrometer
@@ -39,7 +50,9 @@ class Imaging:
         self.last_saved_hash = None
 
     def capture_image(
-        self, exposure=100, ex=None,
+        self,
+        exposure=100,
+        ex=None,
     ):
         """exposure - ms"""
         camera = self.camera
@@ -91,7 +104,7 @@ class Imaging:
         self.name = name
         self.suffix = f"-{suffix}" if suffix else ""
 
-    def make_filename(self,update_counter=True):
+    def make_filename(self, update_counter=True):
         """Generate a unique filename based on the current state.
 
         If a file with the same name exists in the folder, increment the frame counter.
@@ -124,12 +137,11 @@ class Imaging:
             )
             os.makedirs(self.basepath)
 
-    
     def _get_image_hash(self):
         """Generate a hash for the current image to track its uniqueness."""
         if self.image is None:
             return None
-        return hashlib.sha256(self.image.tobytes()).hexdigest()            
+        return hashlib.sha256(self.image.tobytes()).hexdigest()
 
     def save_image(self, overwrite=False):
         """Save the current image to the desired location."""
@@ -142,11 +154,11 @@ class Imaging:
         if self.image is None:
             print(f"{tc.RED}No image to save.{tc.RESET} Capture an image first.")
             return
-        
+
         image_hash = self._get_image_hash()
         if self.imagesaved and image_hash == self.last_saved_hash and not overwrite:
             print(f"{tc.YELLOW}Image already saved as {self.filepath}.{tc.RESET}")
-            return        
+            return
 
         self.filepath = self.make_filename()
 
@@ -212,7 +224,7 @@ class Imaging:
         plt.axhline(l1, c="w", lw=1)
         plt.axhline(l2, c="w", lw=1)
 
-    def plotly_plot(self,image=None):
+    def plotly_plot(self, image=None):
         """
         Plots an interactive image with adjustable colorbar in Plotly.
 
@@ -228,7 +240,9 @@ class Imaging:
             go.Heatmap(
                 z=image,
                 colorscale="Viridis",
-                colorbar=dict(title="Intensity",),
+                colorbar=dict(
+                    title="Intensity",
+                ),
                 zmin=image.min(),
                 zmax=image.max(),
             )

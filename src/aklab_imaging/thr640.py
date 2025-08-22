@@ -49,7 +49,16 @@ class THR640:
     def __init__(self, port=PORT, config_file=None):
         self.position = None
         self._port = port
-        self._open_port()
+        try:
+            self._open_port()
+        except (serial.SerialException, FileNotFoundError, OSError) as e:
+            msg = (
+                f"Motor controller can't connect (port {self._port}). "
+                "Make sure you are connected and the controller is not busy. "
+                "If it is busy, try reconnecting USB; if that doesn't help, restart the controller."
+            )
+            raise RuntimeError(msg) from e
+
         if config_file is None:
             self._config = None
         else:
@@ -57,24 +66,29 @@ class THR640:
             # self._config.open(config_file)
 
     def __del__(self):
-        self.ser.close()
+        try:
+            if hasattr(self, "ser") and getattr(self.ser, "is_open", False):
+                self.ser.close()
+        except Exception:
+            pass
 
     def get_configuration(self):
         """
         get controller`s configuration
         """
-        print('THR640: getting config over Serial Port')
+        print("THR640: getting config over Serial Port")
         self.ser.write((R + CR).encode("utf-8"))
         logger.info("getting information...")
         time.sleep(0.1)
         return self._readline()
 
     def goto(
-        self, count: int = None,
+        self,
+        count: int = None,
     ):
         """
         Move the moter to the required position.
-        Wait until the processing by the controller is done. 
+        Wait until the processing by the controller is done.
         """
         self._send_goto(count)
         self.position = count
@@ -95,7 +109,7 @@ class THR640:
         return lines
 
     def _check_ready(self) -> bool:
-        """ returns if the spectrometer is ready """
+        """returns if the spectrometer is ready"""
         self._get_status()
         lines = self.ser.readlines()
 
@@ -112,7 +126,7 @@ class THR640:
         logger.info("getting status...")
 
     def _send_goto(self, count):
-        """ send a command to go to the specified count """
+        """send a command to go to the specified count"""
         if count < 0:
             r_direction = "-"
         else:
@@ -133,8 +147,10 @@ class THR640:
         if self.ser.is_open == False:
             try:
                 self.ser.open()
-            except:
-                raise Exception("cannot open port!!!!")
+            except Exception as e:
+                raise RuntimeError(
+                    f"Motor controller can't connect (port {port})."
+                ) from e
 
         ## MEMO: time.sleepがないとうまくいかない
         self.ser.write((H + CR).encode("utf-8"))

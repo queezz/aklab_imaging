@@ -3,7 +3,13 @@ from
 https://github.com/charris/pyfli.git
 """
 
-import pyfli
+try:
+    import pyfli  # type: ignore
+except Exception as e:
+    raise RuntimeError(
+        "FLI support requires `pyfli` and the vendor SDK. "
+        "This backend is deprecated; consider switching to another camera."
+    ) from e
 
 
 class FLI:

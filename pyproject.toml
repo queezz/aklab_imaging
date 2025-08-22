@@ -36,6 +36,11 @@ dev = [
     "flake8",
 ]
 
+fli = [
+  "pyfli @ git+https://github.com/charris/pyfli.git"
+]
+
+
 [project.urls]
 homepage = "https://github.com/queezz/aklab_imaging"
 repository = "https://github.com/queezz/aklab_imaging"
